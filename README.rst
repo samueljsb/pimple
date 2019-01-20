@@ -5,7 +5,7 @@ pimple
 
 .. image:: https://img.shields.io/pypi/v/pimple.svg?label=PyPI&logo=python&logoColor=white
     :target: https://pypi.org/project/pimple
-.. image:: https://img.shields.io/badge/license-MIT-yellow.svg
+.. image:: https://img.shields.io/github/license/samueljsb/pimple.svg
     :target: https://opensource.org/licenses/MIT
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
@@ -21,7 +21,7 @@ Install ``pimple`` from PyPI with::
 
 Run pimple in your project directory with::
 
-    $ python -m pimple tests/
+    $ pimple tests/
 
 (substitute the directory that contains your tests)
 

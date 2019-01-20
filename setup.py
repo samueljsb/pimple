@@ -6,7 +6,7 @@ with open("README.rst") as f:
 
 setup(
     name="pimple",
-    version="0.1.1",
+    version="0.1.2",
     description="Summarize your unit tests",
     long_description=README,
     author="Samuel Searles-Bryant",
@@ -23,4 +23,7 @@ setup(
         "Topic :: Software Development :: Testing",
         "Topic :: Utilities",
     ],
+    py_modules=["pimple"],
+    entry_points={"console_scripts": ["pimple = pimple:main"]},
+    tests_require=["pytest"],
 )
