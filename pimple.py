@@ -88,10 +88,11 @@ def main():
     args = parser.parse_args()
 
     modules = []
-    for *_, files in os.walk(args.test_dir):
+    for path, _, files in os.walk(args.test_dir, topdown=True):
         for fname in filter(PYTHON_FILE.match, files):
             test_funcs = []
-            with open(fname, "r") as f:
+            fpath = os.path.join(path, fname)
+            with open(fpath, "r") as f:
                 lines = f.read()
                 funcs = TEST_FUNC.findall(lines)
                 for func in funcs:
