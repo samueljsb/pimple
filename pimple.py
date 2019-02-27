@@ -1,5 +1,5 @@
 """
-lipstick
+pimple
 --------
 
 usage: pimple.py [-h] TEST_DIR
@@ -11,15 +11,14 @@ optional arguments:
   -h, --help  show this help message and exit
 """
 
-import os
 import argparse
 import re
 import textwrap
 from collections import namedtuple
+from pathlib import Path
 
 
 # Regular expressions
-PYTHON_FILE = re.compile(r"^test_\w*[.]py$")
 TEST_FUNC = re.compile(
     r"""
     def             # def statement
@@ -88,16 +87,16 @@ def main():
     args = parser.parse_args()
 
     modules = []
-    for path, _, files in os.walk(args.test_dir, topdown=True):
-        for fname in filter(PYTHON_FILE.match, files):
-            test_funcs = []
-            fpath = os.path.join(path, fname)
-            with open(fpath, "r") as f:
-                lines = f.read()
-                funcs = TEST_FUNC.findall(lines)
-                for func in funcs:
-                    test_funcs.append(TestFunction(*func))
-            modules.append(TestModule(name=fpath, functions=test_funcs))
+    test_dir = Path(args.test_dir)
+    test_files = test_dir.glob("**/test_*.py")
+    for test_file in test_files:
+        test_funcs = []
+        with open(test_file, "r") as f:
+            lines = f.read()
+            funcs = TEST_FUNC.findall(lines)
+            for func in funcs:
+                test_funcs.append(TestFunction(*func))
+        modules.append(TestModule(name=str(test_file), functions=test_funcs))
 
     with open("testcase_summary.rst", "w") as f:
         f.write(format_rst(modules))

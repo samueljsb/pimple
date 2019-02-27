@@ -1,48 +1,6 @@
 """Tests for pimple."""
 
-import pytest
-
 import pimple
-
-
-class TestRegex:
-    """Test the regular expressions."""
-
-    @pytest.mark.parametrize(
-        "fname",
-        [
-            "test_pimple.py",
-            "test_one.py",
-            "test_test.py",
-            "test_this_and_that.py",
-            "test_1.py",
-        ],
-    )
-    def test_re_python_file(self, fname):
-        """Test the ``PYTHON_FILE`` regex:
-
-        The ``PYTHON_FILE`` regex matches valid python files.
-        """
-        assert pimple.PYTHON_FILE.match(fname)
-
-    @pytest.mark.parametrize(
-        "fname",
-        [
-            "pimple.py",
-            "setup.py",
-            "README.md",
-            "test_file.js",
-            "test_1.pyc",
-            "my_test_file.py",
-            "Pipfile",
-        ],
-    )
-    def test_re_python_file_invalid(self, fname):
-        """Test the ``PYTHON_FILE`` regex:
-
-        The ``PYTHON_FILE`` regex does not match invalid file names.
-        """
-        assert not pimple.PYTHON_FILE.match(fname)
 
 
 class TestFormatting:
