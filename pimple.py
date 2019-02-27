@@ -97,7 +97,7 @@ def main():
                 funcs = TEST_FUNC.findall(lines)
                 for func in funcs:
                     test_funcs.append(TestFunction(*func))
-            modules.append(TestModule(name=fname, functions=test_funcs))
+            modules.append(TestModule(name=fpath, functions=test_funcs))
 
     with open("testcase_summary.rst", "w") as f:
         f.write(format_rst(modules))
