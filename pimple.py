@@ -1,39 +1,10 @@
 """pimple: Summarize your unit tests"""
 
-from collections import namedtuple
 import importlib.util
 from pathlib import Path
-import re
 import textwrap
 
 import click
-
-
-# Regular expressions
-TEST_FUNC = re.compile(
-    r"""
-    def             # def statement
-    [ ]             # space
-    (
-        test_       # any function beginning with 'test_"
-        \w*         # the remaining name of the function
-    )
-    \(              # opening paren for args
-        [\w,= ]*    # args
-    \):\n           # closing paren, colon, newline
-    \s*\"{3}        # opening 3 quotes
-    (
-        [^"]*       # the docstring (any character that is not a quote)
-    )
-    \"{3}           # closing 3 quotes
-    """,
-    re.VERBOSE,
-)
-
-
-# Named tuples for collecting data
-TestModule = namedtuple("TestModule", "name, functions")
-TestFunction = namedtuple("TestFunction", "name, docstring")
 
 
 def import_module(path):
@@ -69,32 +40,6 @@ def flush_left(text: str) -> str:
     return first_line + "\n" + textwrap.dedent(end_lines)
 
 
-def format_rst(modules: list) -> str:
-    """Format the test case docstrings for reStructuredText."""
-    output = flush_left(
-        """Test cases
-           ==========
-        """
-    )
-    for module in modules:
-        output += textwrap.dedent(
-            f"""
-            {module.name}
-            {"":-<{len(module.name)}}
-            """
-        )
-        for function in module.functions:
-            output += flush_left(
-                f"""
-                {function.name}
-                {"":"<{len(function.name)}}
-
-                {function.docstring}
-                """
-            )
-    return output
-
-
 @click.command()
 @click.argument("directory", type=click.Path(exists=True, file_okay=False))
 def main(directory):
@@ -103,17 +48,35 @@ def main(directory):
     Args:
         directory (str): The directory to find test files in.
     """
-    modules = []
+    output_lines = [underline("Test cases")]
+
     test_dir = Path(directory)
     test_files = test_dir.glob("**/test_*.py")
     for test_file in test_files:
-        test_funcs = []
-        with open(test_file, "r") as f:
-            lines = f.read()
-            funcs = TEST_FUNC.findall(lines)
-            for func in funcs:
-                test_funcs.append(TestFunction(*func))
-        modules.append(TestModule(name=str(test_file), functions=test_funcs))
+        module = import_module(test_file)
+        output_lines.append(underline(test_file, "-"))
+        output_lines.append(flush_left(module.__doc__).rstrip())
+
+        funcs = [attr for attr in dir(module) if attr.startswith("test_")]
+        classes = [attr for attr in dir(module) if attr.startswith("Test")]
+
+        for func_name in funcs:
+            func = getattr(module, func_name)
+            output_lines.append(underline(func.__name__, "^"))
+            output_lines.append(flush_left(func.__doc__).rstrip())
+
+        for class_name in classes:
+            cls = getattr(module, class_name)
+            output_lines.append(underline(cls.__name__, "^"))
+            output_lines.append(flush_left(cls.__doc__).rstrip())
+
+            funcs = [attr for attr in dir(cls) if attr.startswith("test_")]
+            for func_name in funcs:
+                func = getattr(cls, func_name)
+                output_lines.append(underline(func.__name__, "'"))
+                output_lines.append(flush_left(func.__doc__).rstrip())
+
+    output = "\n\n".join(output_lines)
 
     with open("testcase_summary.rst", "w") as f:
-        f.write(format_rst(modules))
+        f.write(output)
