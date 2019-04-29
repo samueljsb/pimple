@@ -34,6 +34,10 @@ class TestFormatting:
         output = pimple.flush_left(input_)
         assert output == expected_output
 
+    def test_flush_left_empty(self):
+        """Test that ``flush_left`` returns an empty string if given ``None``"""
+        assert pimple.flush_left(None) == ""
+
     def test_underline(self):
         """Test the ``underline`` function with no character specified."""
         input_ = "Some text"
