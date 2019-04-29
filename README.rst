@@ -26,3 +26,5 @@ Run pimple in your project directory with::
 (substitute the directory that contains your tests)
 
 The ``testcase_summary.rst`` file can be found in the directory you run the script from.
+You can also specify an output file.
+*N.B.* The output will be formatted as reStructuredText.
