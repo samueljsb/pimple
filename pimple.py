@@ -2,6 +2,7 @@
 
 import importlib.util
 from pathlib import Path
+import sys
 import textwrap
 
 import click
@@ -16,6 +17,10 @@ def import_module(path):
     Returns:
         module: The imported module.
     """
+    # Add the pwd to the python path.
+    pwd = str(Path.cwd())
+    if pwd not in sys.path:
+        sys.path.append(pwd)
     spec = importlib.util.spec_from_file_location("module", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
