@@ -42,7 +42,8 @@ def flush_left(text: str) -> str:
 
 @click.command()
 @click.argument("directory", type=click.Path(exists=True, file_okay=False))
-def main(directory):
+@click.option("-v", "--verbose", help="echo output to stdout", is_flag=True)
+def main(directory, verbose):
     """Recurse through the given directory and compile a summary of test cases found.
 
     Args:
@@ -80,3 +81,6 @@ def main(directory):
 
     with open("testcase_summary.rst", "w") as f:
         f.write(output)
+
+    if verbose:
+        click.echo(output)
