@@ -42,12 +42,11 @@ def flush_left(text: str) -> str:
 
 @click.command()
 @click.argument("directory", type=click.Path(exists=True, file_okay=False))
-@click.option("-v", "--verbose", help="echo output to stdout", is_flag=True)
-def main(directory, verbose):
-    """Recurse through the given directory and compile a summary of test cases found.
-
-    Args:
-        directory (str): The directory to find test files in.
+@click.argument("output_file", type=click.File("w"), default="testcase_summary.rst")
+def main(directory, output_file):
+    """Find test files in the given DIRECTORY and compile a summary of the test modules,
+    classes, and functions from their docstrings.
+    The result is saved to OUTPUT_FILE (default: testcase_summary.rst).
     """
     output_lines = [underline("Test cases")]
 
@@ -78,9 +77,4 @@ def main(directory, verbose):
                 output_lines.append(flush_left(func.__doc__).rstrip())
 
     output = "\n\n".join(output_lines)
-
-    with open("testcase_summary.rst", "w") as f:
-        f.write(output)
-
-    if verbose:
-        click.echo(output)
+    output_file.write(output)
