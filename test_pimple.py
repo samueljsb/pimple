@@ -35,8 +35,12 @@ class TestFormatting:
         assert output == expected_output
 
     def test_flush_left_empty(self):
-        """Test that ``flush_left`` returns an empty string if given ``None``"""
+        """Test that ``flush_left`` returns an empty string if given ``None``."""
         assert pimple.flush_left(None) == ""
+
+    def test_flush_left_single_line(self):
+        """Test that ``flush_left`` works with a single line."""
+        assert pimple.flush_left("Some string") == "Some string"
 
     def test_underline(self):
         """Test the ``underline`` function with no character specified."""

@@ -42,8 +42,8 @@ def underline(text: str, char: str = "=") -> str:
 def flush_left(text: str) -> str:
     """Remove leading whitespace from each line."""
     if text:
-        first_line, __, end_lines = text.partition("\n")
-        return first_line + "\n" + textwrap.dedent(end_lines)
+        first_line, sep, end_lines = text.partition("\n")
+        return first_line + sep + textwrap.dedent(end_lines)
     return ""
 
 
