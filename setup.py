@@ -6,7 +6,7 @@ with open("README.rst") as f:
 
 setup(
     name="pimple",
-    version="0.2.1",
+    version="0.2.2",
     description="Summarize your unit tests",
     long_description=README,
     author="Samuel Searles-Bryant",
