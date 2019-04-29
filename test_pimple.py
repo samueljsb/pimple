@@ -34,6 +34,20 @@ class TestFormatting:
         output = pimple.flush_left(input_)
         assert output == expected_output
 
+    def test_underline(self):
+        """Test the ``underline`` function with no character specified."""
+        input_ = "Some text"
+        expected_output = "Some text\n========="
+        output = pimple.underline(input_)
+        assert output == expected_output
+
+    def test_underline_with_character(self):
+        """Test the ``underline`` function with a character specified."""
+        input_ = "Some other text"
+        expected_output = "Some other text\n^^^^^^^^^^^^^^^"
+        output = pimple.underline(input_, char="^")
+        assert output == expected_output
+
 
 class TestCollection:
     """Tests for the collection of test modules, classes, and functions."""

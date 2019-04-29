@@ -51,6 +51,18 @@ def import_module(path):
     return module
 
 
+def underline(text: str, char: str = "=") -> str:
+    """Underline the given text.
+
+    Args:
+        text (str):
+            The text to be underlined.
+        char (str, optional):
+            The character with which to underline the text. (default: `=`)
+    """
+    return str(text) + "\n" + char * len(str(text))
+
+
 def flush_left(text: str) -> str:
     """Remove leading whitespace from each line."""
     first_line, __, end_lines = text.partition("\n")
