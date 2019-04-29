@@ -37,9 +37,8 @@ TestFunction = namedtuple("TestFunction", "name, docstring")
 
 def flush_left(text: str) -> str:
     """Remove leading whitespace from each line."""
-    lines = text.split("\n")
-    lines = [line.lstrip() for line in lines]
-    return "\n".join(lines)
+    first_line, __, end_lines = text.partition("\n")
+    return first_line + "\n" + textwrap.dedent(end_lines)
 
 
 def format_rst(modules: list) -> str:
