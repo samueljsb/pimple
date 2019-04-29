@@ -25,5 +25,6 @@ setup(
     ],
     py_modules=["pimple"],
     entry_points={"console_scripts": ["pimple = pimple:main"]},
+    install_requires=["click"],
     tests_require=["pytest"],
 )

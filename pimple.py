@@ -1,21 +1,11 @@
-"""
-pimple
---------
+"""pimple: Summarize your unit tests"""
 
-usage: pimple.py [-h] TEST_DIR
-
-positional arguments:
-  TEST_DIR    The test directory to search
-
-optional arguments:
-  -h, --help  show this help message and exit
-"""
-
-import argparse
 import re
 import textwrap
 from collections import namedtuple
 from pathlib import Path
+
+import click
 
 
 # Regular expressions
@@ -78,16 +68,16 @@ def format_rst(modules: list) -> str:
     return output
 
 
-def main():
-    """Recurse through the given directory and compile a summary of test cases found."""
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "test_dir", metavar="TEST_DIR", type=str, help="The test directory to search"
-    )
-    args = parser.parse_args()
+@click.command()
+@click.argument("directory", type=click.Path(exists=True, file_okay=False))
+def main(directory):
+    """Recurse through the given directory and compile a summary of test cases found.
 
+    Args:
+        directory (str): The directory to find test files in.
+    """
     modules = []
-    test_dir = Path(args.test_dir)
+    test_dir = Path(directory)
     test_files = test_dir.glob("**/test_*.py")
     for test_file in test_files:
         test_funcs = []
@@ -100,7 +90,3 @@ def main():
 
     with open("testcase_summary.rst", "w") as f:
         f.write(format_rst(modules))
-
-
-if __name__ == "__main__":
-    main()
