@@ -33,3 +33,25 @@ class TestFormatting:
         )
         output = pimple.flush_left(input_)
         assert output == expected_output
+
+
+class TestCollection:
+    """Tests for the collection of test modules, classes, and functions."""
+
+    def test_import_module(self, tmpdir):
+        """Test that a module can be imported."""
+        test_file = tmpdir.join("test_file.py")
+        test_file.write(
+            '"""This is a test module."""\n'
+            "\n"
+            "def foo():\n"
+            "    pass\n"
+            "\n"
+            "class Bar:\n"
+            "    pass\n"
+        )
+
+        module = pimple.import_module(test_file)
+        assert module.__doc__ == "This is a test module."
+        assert "foo" in dir(module)
+        assert "Bar" in dir(module)

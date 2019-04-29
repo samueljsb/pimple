@@ -1,9 +1,10 @@
 """pimple: Summarize your unit tests"""
 
+from collections import namedtuple
+import importlib.util
+from pathlib import Path
 import re
 import textwrap
-from collections import namedtuple
-from pathlib import Path
 
 import click
 
@@ -33,6 +34,21 @@ TEST_FUNC = re.compile(
 # Named tuples for collecting data
 TestModule = namedtuple("TestModule", "name, functions")
 TestFunction = namedtuple("TestFunction", "name, docstring")
+
+
+def import_module(path):
+    """Import a module from a filepath.
+
+    Args:
+        path (PathLike): The file to import.
+
+    Returns:
+        module: The imported module.
+    """
+    spec = importlib.util.spec_from_file_location("module", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def flush_left(text: str) -> str:
