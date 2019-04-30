@@ -69,18 +69,18 @@ def main(directory, output_file):
 
         for func_name in funcs:
             func = getattr(module, func_name)
-            output_lines.append(underline(func.__name__, "^"))
+            output_lines.append(underline(func_name, "^"))
             output_lines.append(flush_left(func.__doc__).rstrip())
 
         for class_name in classes:
             cls = getattr(module, class_name)
-            output_lines.append(underline(cls.__name__, "^"))
+            output_lines.append(underline(class_name, "^"))
             output_lines.append(flush_left(cls.__doc__).rstrip())
 
             funcs = [attr for attr in dir(cls) if attr.startswith("test_")]
             for func_name in funcs:
                 func = getattr(cls, func_name)
-                output_lines.append(underline(func.__name__, "'"))
+                output_lines.append(underline(func_name, "'"))
                 output_lines.append(flush_left(func.__doc__).rstrip())
 
     output = "\n\n".join(output_lines)
