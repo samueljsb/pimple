@@ -28,3 +28,12 @@ Run pimple in your project directory with::
 The ``testcase_summary.rst`` file can be found in the directory you run the script from.
 You can also specify an output file.
 *N.B.* The output will be formatted as reStructuredText.
+
+Why ``pimple``?
+---------------
+
+    "There are only two hard things in Computer Science: cache invalidation and naming things."
+
+    -- Phil Karlton
+
+I used a random word generator.
